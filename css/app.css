@@ -1,0 +1,159 @@
+:root {
+    --bg-color: #f4f4f9;
+    --text-color: #333;
+    --primary: #6200ea;
+    --danger: #d32f2f;
+    --success: #388e3c;
+    --card-bg: #fff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    user-select: none;
+}
+
+#app {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* 상태바 */
+#status-bar {
+    background: var(--primary);
+    color: #fff;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* 탭 */
+#tabs {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    background: #fff;
+}
+#tabs button {
+    flex: 1;
+    padding: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: #666;
+    transition: 0.2s;
+}
+#tabs button.active {
+    border-bottom: 3px solid var(--primary);
+    color: var(--primary);
+}
+
+/* 스크린 공통 */
+.screen { padding: 15px; padding-bottom: 80px; }
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+}
+
+/* 카드 스타일 */
+.card {
+    border: 1px solid #eee;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--card-bg);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+.card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.card:active { transform: scale(0.98); }
+.card.disabled { opacity: 0.5; pointer-events: none; background: #f9f9f9; }
+
+.card-header { font-weight: bold; margin-bottom: 5px; display: flex; justify-content: space-between; }
+.card-cost { font-size: 0.8rem; color: #666; }
+.card small { color: #888; display: block; margin-top: 4px; }
+
+/* 로그 */
+#log-display {
+    margin-top: 20px;
+    padding: 10px;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    height: 120px;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #444;
+}
+
+/* 시스템 버튼 */
+.action-btn {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+.action-btn.danger { background: var(--danger); }
+
+/* 모달 */
+#modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 999;
+}
+#modal-overlay.hidden { display: none; }
+#modal-box {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 85%;
+    max-width: 400px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    animation: popIn 0.2s ease-out;
+}
+@keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+#modal-title { margin-top: 0; color: var(--primary); }
+#modal-desc { line-height: 1.5; margin-bottom: 20px; white-space: pre-wrap; }
+#modal-choices button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+#modal-choices button:hover { background: #5000d0; }

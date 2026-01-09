@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Project (Final Prototype)</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 상단 상태바 -->
+        <header id="status-bar">
+            <div class="status-group">
+                <span id="day-display">Day 1</span>
+                <span id="phase-display">아침</span>
+                <span id="slots-display">행동력 3/3</span>
+            </div>
+            <div class="status-group">
+                <span>돈: ¥<span id="money-val">0</span></span>
+                <span>체력: <span id="sta-val">0</span></span>
+                <span>스트레스: <span id="str-val">0</span></span>
+            </div>
+        </header>
+
+        <!-- 메인 콘텐츠 영역 (탭 전환) -->
+        <main id="main-content">
+            <!-- 탭 버튼 -->
+            <nav id="tabs">
+                <button data-tab="planner" class="active">일과</button>
+                <button data-tab="stats">상태</button>
+                <button data-tab="shop">상점</button>
+                <button data-tab="system">시스템</button>
+            </nav>
+
+            <!-- 1. 플래너 화면 -->
+            <section id="screen-planner" class="screen active">
+                <div id="action-list" class="grid-container"></div>
+                <div id="log-display"></div>
+            </section>
+
+            <!-- 2. 상태 화면 -->
+            <section id="screen-stats" class="screen" style="display:none;">
+                <h3>캐릭터 상태</h3>
+                <div id="char-stats-grid" class="stats-grid"></div>
+                <h3>플레이어/기타</h3>
+                <div id="player-stats-grid" class="stats-grid"></div>
+            </section>
+
+            <!-- 3. 상점 화면 -->
+            <section id="screen-shop" class="screen" style="display:none;">
+                <div id="shop-list" class="grid-container"></div>
+            </section>
+
+            <!-- 4. 시스템 화면 -->
+            <section id="screen-system" class="screen" style="display:none;">
+                <button id="btn-save" class="action-btn">수동 저장</button>
+                <button id="btn-reset" class="action-btn danger">데이터 초기화 (Reset)</button>
+                <div id="save-info"></div>
+            </section>
+        </main>
+
+        <!-- 모달 (이벤트/알림용) -->
+        <div id="modal-overlay" class="hidden">
+            <div id="modal-box">
+                <h3 id="modal-title">제목</h3>
+                <p id="modal-desc">내용</p>
+                <div id="modal-choices"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 스크립트 진입점 -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
