@@ -1,6 +1,7 @@
 import { CONSTANTS, ACTIONS, ITEMS } from '../data.js';
 import { Rules, Utils } from './rules.js';
 import { SeededRNG } from './rng.js';
+import { EventEngine } from './events.js'; // [수정] 조건 체크를 위해 추가
 
 export class GameState {
     constructor() {
@@ -92,6 +93,15 @@ export class GameState {
 
     buyItem(itemId) {
         const item = ITEMS[itemId];
+
+        // [수정] 아이템 구매 조건(req) 체크
+        if (item.req) {
+            if (!EventEngine.checkCondition(item.req, this.data)) {
+                this.log(`조건 미달: ${item.name}을(를) 구매할 수 없습니다.`);
+                return;
+            }
+        }
+
         if (this.data.player.money >= item.price) {
             this.data.player.money -= item.price;
             this.data.inventory[itemId] = (this.data.inventory[itemId] || 0) + 1;
@@ -108,6 +118,8 @@ export class GameState {
                 this.log(`${item.name} 구매.`);
             }
             this.data.player.sta = Utils.clamp(this.data.player.sta, 0, this.data.player.maxSta);
+        } else {
+            this.log("돈이 부족합니다.");
         }
     }
 
