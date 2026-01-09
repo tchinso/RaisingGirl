@@ -180,7 +180,7 @@ export const EVENTS = [
         choices: [
             { text: "물론이지. (정착)", effects: { aff: 20 }, next: "chapter_2" }
         ],
-        failText: "그녀는 짐을 싸서 조용히 사라졌습니다... (Bad End: 떠남)",
+        failText: "그녀는 짐을 싸서 조용히 사라졌습니다...",
         failEffects: { badFlag: 1 }
     }, // 콤마 확인
     {
