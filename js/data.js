@@ -182,7 +182,7 @@ export const EVENTS = [
         ],
         failText: "그녀는 짐을 싸서 조용히 사라졌습니다... (Bad End: 떠남)",
         failEffects: { badFlag: 1 }
-    },
+    }, // 콤마 확인
     {
         id: "evt_day16_nurse",
         type: "fixed",
@@ -194,7 +194,7 @@ export const EVENTS = [
         ],
         failText: "그녀는 몸이 안 좋은지 하루 종일 방에 틀어박혀 있습니다.",
         failEffects: { badFlag: 1, tra: 10 }
-    },
+    }, // 콤마 확인
     {
         id: "evt_rand_clean",
         type: "random",
@@ -203,7 +203,7 @@ export const EVENTS = [
         choices: [
             { text: "추억에 잠긴다", effects: { mood: 5, str: -5 } }
         ]
-    },
+    }, // 콤마 확인
     {
         id: "evt_rand_nightmare",
         type: "random",
@@ -214,7 +214,7 @@ export const EVENTS = [
             { text: "깨워서 안심시킨다", effects: { aff: 2, tra: -2 } },
             { text: "지켜본다", effects: { tra: 2 } }
         ]
-    },
+    }, // ★★★ 여기 콤마(,)가 빠지면 오류가 발생합니다. 꼭 확인하세요.
     {
         id: "evt_common_bad_end",
         type: "fixed",
