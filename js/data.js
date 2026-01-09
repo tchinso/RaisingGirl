@@ -2,9 +2,9 @@
 
 export const CONSTANTS = {
     PHASES: ["morning", "day", "evening", "night", "late"],
-    SLOTS: { morning: 3, day: 2, evening: 2, night: 2, late: 5 }, // 4-1
+    SLOTS: { morning: 3, day: 2, evening: 2, night: 2, late: 5 },
     START_STATS: {
-        player: { money: 5000, sta: 100, maxSta: 100, str: 10, skl: 0, lp2: 0, virtue: 0 },
+        player: { money: 5000, sta: 100, maxSta: 100, str: 10, skl: 0, lp2: 0, virtue: 0, dressTier: 0 },
         char: { aff: 20, tru: 0, opn: 0, mood: -20, sat: 55, hp: 35, tra: 80, fox: 0, skill_c: 0 }
     }
 };
@@ -48,7 +48,7 @@ export const ACTIONS = {
         tags: ["intimacy"]
     },
 
-    // --- C. 식사/가사 (식사 선택지는 편의상 개별 행동으로 분리) ---
+    // --- C. 식사/가사 ---
     "meal_cook": {
         id: "meal_cook", name: "직접 요리", phases: ["evening"],
         cost: { sta: 10, money: 400, str: -1 }, gain: { aff: 1, lp2: 1 },
@@ -78,7 +78,7 @@ export const ACTIONS = {
     },
     "shop_visit": {
         id: "shop_visit", name: "쇼핑하러 가기", phases: ["day"],
-        cost: { slot: 1 }, gain: {}, // 실제 구매는 상점 탭에서
+        cost: { slot: 1 }, gain: {}, 
         tags: ["shop"]
     },
     "hobby_tea": {
@@ -119,8 +119,10 @@ export const ACTIONS = {
     // --- G. 친밀/특수 ---
     "intimacy_session": {
         id: "intimacy_session", name: "친밀 세션", phases: ["night", "late"],
-        cost: { sta: 10, str: -2 }, gain: { aff: 4, opn: 6, sat: 10 },
-        req: { flag: "lover", stat: "char.hp", gte: 60 },
+        // OPN 증가는 dressTier에 따라 state.js에서 동적 처리됨
+        cost: { sta: 10, str: -2 }, gain: { aff: 4, sat: 10 },
+        // 조건 추가: 연인상태 & HP 60 이상 & 연애가이드북 보유
+        req: { flag: "lover", stat: "char.hp", gte: 60, item: "book_loveguide" },
         tags: ["intimacy"]
     },
     "intimacy_bath": {
@@ -147,11 +149,8 @@ export const ITEMS = {
 
     // 약국
     "drug_energy": { id: "drug_energy", name: "에너지드링크", price: 1000, type: "consumable", effects: { sta: 15, str: 1 } },
-    //"drug_tonic": { id: "drug_tonic", name: "정력제", price: 2000, type: "consumable", effects: { sat: 3 } }, 
-    //"drug_condom": { id: "drug_condom", name: "콘돔", price: 500, type: "passive", effects: { risk: 0 } },
-    //"drug_emergency": { id: "drug_emergency", name: "긴급피임약", price: 3000, type: "consumable", effects: { mood: -10 } },
 
-    // 카페/술집 (즉시 소비형으로 구현)
+    // 카페/술집
     "cafe_coffee": { id: "cafe_coffee", name: "커피(테이크아웃)", price: 500, type: "consumable", effects: { mood: 10, str: -2 } },
     "bar_plumwine": { id: "bar_plumwine", name: "매실주", price: 1200, type: "consumable", effects: { mood: 8, str: -2 } },
 
@@ -159,17 +158,33 @@ export const ITEMS = {
     "book_basic": { id: "book_basic", name: "[책] 내직의 기본", price: 5000, type: "passive", effects: { bookTier: 1 } },
     "book_synergy": { id: "book_synergy", name: "[책] 화학반응", price: 10000, type: "passive", effects: { bookTier: 1 } },
     "book_master": { id: "book_master", name: "[책] 매니저의 극의", price: 20000, type: "passive", effects: { bookTier: 1, autoIncome: true } },
-    "mag_weeklysexy": { id: "mag_weeklysexy", name: "[잡지] 주간 섹시", price: 3000, type: "consumable", effects: { opn: 5 }, limits: { daily: 1 } },
+    
+    // [변경] 이름, 타입, 조건 변경
+    "book_loveguide": { 
+        id: "book_loveguide", 
+        name: "[책] 연애 가이드북", 
+        price: 3000, 
+        type: "passive", 
+        effects: {}, // 소지 효과는 intimacy_session 조건으로 작동
+        req: { flag: "lover" } 
+    },
+    
     "book_lesson": { id: "book_lesson", name: "[책] 이번 주 교훈", price: 3000, type: "consumable", effects: { lp2: 10 } },
 
-    // 의상/도구
-    "dress_onepiece": { id: "dress_onepiece", name: "원피스", price: 8000, type: "item", req: { stat: "char.aff", gte: 50 } },
-    "dress_swimsuit": { id: "dress_swimsuit", name: "수영복", price: 12000, type: "item", req: { stat: "char.opn", gte: 100 } },
-    "dress_nurse": { id: "dress_nurse", name: "간호사복", price: 15000, type: "item", req: { stat: "char.tru", gte: 150 } },
-    "tool_camera": { id: "tool_camera", name: "카메라", price: 10000, type: "item", effects: { photo: true } }
+    // 의상/도구 (의상 구입 시 dressTier +1)
+    "dress_onepiece": { id: "dress_onepiece", name: "원피스", price: 8000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.aff", gte: 50 } },
+    "dress_swimsuit": { id: "dress_swimsuit", name: "수영복", price: 12000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.opn", gte: 100 } },
+    
+    // [변경] 간호사복 조건 변경 (신뢰 -> 건강)
+    "dress_nurse": { id: "dress_nurse", name: "간호사복", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.hp", gte: 150 } },
+    
+    // [신규] 교복, 산타걸
+    "dress_uniform": { id: "dress_uniform", name: "교복", price: 10000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.tru", gte: 150 } },
+    "dress_santa": { id: "dress_santa", name: "산타걸", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.sat", gte: 150 } },
+
+    // [삭제] 카메라
 };
 
-// 5-6 이벤트 데이터
 export const EVENTS = [
     {
         id: "evt_day7_check",
@@ -182,7 +197,7 @@ export const EVENTS = [
         ],
         failText: "그녀는 짐을 싸서 조용히 사라졌습니다...",
         failEffects: { badFlag: 1 }
-    }, // 콤마 확인
+    },
     {
         id: "evt_day16_nurse",
         type: "fixed",
@@ -194,7 +209,7 @@ export const EVENTS = [
         ],
         failText: "그녀는 몸이 안 좋은지 하루 종일 방에 틀어박혀 있습니다.",
         failEffects: { badFlag: 1, tra: 10 }
-    }, // 콤마 확인
+    },
     {
         id: "evt_rand_clean",
         type: "random",
@@ -203,7 +218,7 @@ export const EVENTS = [
         choices: [
             { text: "추억에 잠긴다", effects: { mood: 5, str: -5 } }
         ]
-    }, // 콤마 확인
+    },
     {
         id: "evt_rand_nightmare",
         type: "random",
@@ -214,17 +229,59 @@ export const EVENTS = [
             { text: "깨워서 안심시킨다", effects: { aff: 2, tra: -2 } },
             { text: "지켜본다", effects: { tra: 2 } }
         ]
-    }, // ★★★ 여기 콤마(,)가 빠지면 오류가 발생합니다. 꼭 확인하세요.
+    },
     {
         id: "evt_common_bad_end",
         type: "fixed",
-        trigger: { phase: "morning" }, // 매일 아침 체크
-        condition: { flag: "badFlag", gte: 1 }, // 조건: badFlag가 1개라도 있으면 발동
-        
-        text: "아침에 눈을 떴지만, 집안에는 차가운 정적만이 흐릅니다.\n그녀의 방은 텅 비어있고, 짐도 모두 사라졌습니다.\n\n(Bad End: 그녀는 떠났습니다)",
+        trigger: { phase: "morning" },
+        condition: { flag: "badFlag", gte: 1 },
+        text: "아침에 눈을 떴지만, 집안에는 차가운 정적만이 흐릅니다.\n(Bad End: 그녀는 떠났습니다)",
         choices: [
-            // gameOver: true를 넣어 게임을 완전히 끝냄
             { text: "받아들인다 (타이틀로)", effects: { gameOver: true } }
+        ]
+    },
+    
+    // --- 신규 엔딩 관련 이벤트 ---
+    
+    // 1. 자립 성공
+    {
+        id: "evt_badge_independent",
+        type: "fixed",
+        trigger: { phase: "morning" },
+        // 조건: bookTier 2이상 (기본책+화학반응 등), 돈 200,000, 호감 150
+        condition: { stat: "player.money", gte: 200000, stat2: "char.aff", gte2: 150 }, // bookTier는 별도 체크 필요하지만 간략화를 위해 여기서 생략하거나 Custom Logic에서 처리
+        // 단순화를 위해 money/aff만 체크하거나, executeAction에서 bookTier체크 로직 필요.
+        // 여기서는 조건 만족 시 발생하도록 설정. (참고: bookTier 조건은 EventEngine 확장이 필요할 수 있으나,
+        // bookTier는 player stats에 있으므로 stat: "player.bookTier" gte: 2 로 처리 가능)
+        condition: { stat: "player.money", gte: 200000, stat2: "char.aff", gte2: 150, stat3: "player.bookTier", gte3: 2 },
+        
+        text: "통장을 확인해보니 목표했던 금액이 모였습니다.\n지식과 경험도 충분히 쌓였습니다.\n이제 당신은 누구에게도 의존하지 않고 살아갈 수 있습니다.",
+        choices: [
+            { text: "자립의 증표를 획득한다", effects: { badFlag: 0 /*dummy*/, flag_independent: 1 } }
+        ]
+    },
+
+    // 2. 연인이 됨
+    {
+        id: "evt_badge_lover",
+        type: "fixed",
+        trigger: { phase: "night" },
+        condition: { flag: "flag_independent", stat: "char.tra", lte: 0, stat2: "char.aff", gte2: 300, stat3: "char.tru", gte3: 200 },
+        text: "그녀가 당신의 손을 잡고 진지한 눈빛으로 바라봅니다.\n트라우마를 극복하고, 당신을 온전히 신뢰하게 된 그녀가 고백해옵니다.",
+        choices: [
+            { text: "나도 사랑해. (연인이 된다)", effects: { flag_lover: 1, lover: 1 } } // lover 플래그는 시스템용, flag_lover는 배지용
+        ]
+    },
+
+    // 3. 진엔딩
+    {
+        id: "evt_true_end",
+        type: "fixed",
+        trigger: { phase: "morning" },
+        condition: { flag: "lover", stat: "char.opn", gte: 1000 },
+        text: "햇살이 눈부신 아침, 그녀가 수줍은 미소로 당신을 깨웁니다.\n\n\"우리에게... 사랑의 결실이 생겼어요.\"\n\n두 사람은 서로를 끌어안으며 영원한 행복을 맹세합니다.\n\n< True End: 세계에서 가장 행복한 사람 >",
+        choices: [
+            { text: "축하합니다! (게임 종료)", effects: { gameOver: true } }
         ]
     }
 ];

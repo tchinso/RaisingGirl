@@ -1,7 +1,7 @@
 import { CONSTANTS, ACTIONS, ITEMS } from '../data.js';
 import { Rules, Utils } from './rules.js';
 import { SeededRNG } from './rng.js';
-import { EventEngine } from './events.js'; // [수정] 조건 체크를 위해 추가
+import { EventEngine } from './events.js';
 
 export class GameState {
     constructor() {
@@ -13,7 +13,7 @@ export class GameState {
             char: { ...CONSTANTS.START_STATS.char },
             inventory: {},
             dailyLimits: {},
-            flags: {}, // 이벤트 플래그
+            flags: {}, 
             log: [],
             rngSeed: Date.now()
         };
@@ -72,6 +72,19 @@ export class GameState {
         if (gain.sat) c.sat += gain.sat;
         if (gain.hp) c.hp += gain.hp;
         if (gain.tra) c.tra += gain.tra;
+        
+        // [수정] 개방도(OPN) 로직 구현
+        if (gain.opn) c.opn += gain.opn;
+
+        // [신규] 친밀 세션 동적 보상 (dressTier * 20)
+        if (actionId === 'intimacy_session') {
+            const tier = p.dressTier || 0;
+            const opnBonus = 20 * tier;
+            if (opnBonus > 0) {
+                c.opn += opnBonus;
+                this.log(`의상 효과로 개방도 대폭 상승! (+${opnBonus})`);
+            }
+        }
 
         // 클램프
         p.sta = Utils.clamp(p.sta, 0, p.maxSta);
@@ -79,6 +92,8 @@ export class GameState {
         c.mood = Utils.clamp(c.mood, -100, 100);
         c.sat = Utils.clamp(c.sat, 0, 100);
         c.hp = Utils.clamp(c.hp, 0, 100);
+        // opn은 상한 없음 (또는 매우 높게)
+        if (c.opn < 0) c.opn = 0;
 
         // 슬롯 차감
         this.data.slotsLeft -= (action.cost.slot !== undefined ? action.cost.slot : 1);
@@ -94,7 +109,6 @@ export class GameState {
     buyItem(itemId) {
         const item = ITEMS[itemId];
 
-        // [수정] 아이템 구매 조건(req) 체크
         if (item.req) {
             if (!EventEngine.checkCondition(item.req, this.data)) {
                 this.log(`조건 미달: ${item.name}을(를) 구매할 수 없습니다.`);
@@ -106,12 +120,25 @@ export class GameState {
             this.data.player.money -= item.price;
             this.data.inventory[itemId] = (this.data.inventory[itemId] || 0) + 1;
             
-            if (item.type === 'consumable') {
+            // 효과 적용
+            if (item.effects) {
                 const eff = item.effects;
                 if (eff.sta) this.data.player.sta += eff.sta;
                 if (eff.str) this.data.player.str += eff.str;
                 if (eff.mood) this.data.char.mood += eff.mood;
                 
+                // [신규] dressTier 증가
+                if (eff.dressTier) {
+                    this.data.player.dressTier = (this.data.player.dressTier || 0) + eff.dressTier;
+                }
+                
+                // [신규] bookTier 증가 (기존 로직에는 명시적 처리가 없었음, effects 객체 활용)
+                if (eff.bookTier) {
+                    this.data.player.bookTier = (this.data.player.bookTier || 0) + eff.bookTier;
+                }
+            }
+
+            if (item.type === 'consumable') {
                 this.data.inventory[itemId]--;
                 this.log(`${item.name} 사용.`);
             } else {

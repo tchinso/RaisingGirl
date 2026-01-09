@@ -1,5 +1,5 @@
 import { ACTIONS, ITEMS } from '../data.js';
-import { EventEngine } from '../engine/events.js'; // [수정] 조건 체크를 위해 추가
+import { EventEngine } from '../engine/events.js';
 
 export const Render = {
     updateStatus(state) {
@@ -32,12 +32,13 @@ export const Render = {
             const limit = action.limits?.daily;
             let isDisabled = false;
 
-            // 행동력이 0 이하이면 모든 일반 행동 비활성화
             if (state.slotsLeft <= 0) isDisabled = true;
-
             if (limit && used >= limit) isDisabled = true;
             if (state.player.sta < (action.cost.sta || 0)) isDisabled = true;
             if (state.player.money < (action.cost.money || 0)) isDisabled = true;
+            
+            // 조건 체크 (req 필드가 있는 액션의 경우)
+            if (action.req && !EventEngine.checkCondition(action.req, state)) isDisabled = true;
 
             if (isDisabled) btn.classList.add('disabled');
 
@@ -55,7 +56,6 @@ export const Render = {
             container.appendChild(btn);
         });
 
-        // "시간 보내기" 버튼 (슬롯이 남았어도 강제로 넘길 수 있게 할 수도 있고, 0일 때만 띄울 수도 있음. 여기선 0일 때)
         if (state.slotsLeft <= 0) {
             const nextBtn = document.createElement('div');
             nextBtn.className = 'card';
@@ -75,15 +75,19 @@ export const Render = {
         const pGrid = document.getElementById('player-stats-grid');
         const cGrid = document.getElementById('char-stats-grid');
         
+        // [수정] 의상 티어(dressTier) 표시
         pGrid.innerHTML = `
             <div>생활기술(SKL): ${state.player.skl}</div>
             <div>LP2: ${state.player.lp2}</div>
             <div>덕행: ${state.player.virtue || 0}</div>
+            <div>의상 레벨: ${state.player.dressTier || 0}</div>
         `;
         
+        // [수정] 개방도(OPN) 표시
         cGrid.innerHTML = `
             <div>호감(AFF): ${state.char.aff}</div>
             <div>신뢰(TRU): ${state.char.tru}</div>
+            <div>개방(OPN): ${state.char.opn}</div>
             <div>기분(MOOD): ${state.char.mood}</div>
             <div>만족(SAT): ${state.char.sat}</div>
             <div>건강(HP): ${state.char.hp}</div>
@@ -99,20 +103,24 @@ export const Render = {
             const el = document.createElement('div');
             el.className = 'card';
             
-            // [수정] 조건 충족 여부 체크
             const isReqMet = item.req ? EventEngine.checkCondition(item.req, state) : true;
             const hasMoney = state.player.money >= item.price;
             const canBuy = hasMoney && isReqMet;
 
             if (!canBuy) el.classList.add('disabled');
 
-            // [수정] 조건 불충족 시 텍스트 표시
             let reqText = '';
             if (item.req && !isReqMet) {
-                if (item.req.stat === 'char.aff') reqText = ` (호감 ${item.req.gte} 필요)`;
-                else if (item.req.stat === 'char.opn') reqText = ` (개방 ${item.req.gte} 필요)`;
-                else if (item.req.stat === 'char.tru') reqText = ` (신뢰 ${item.req.gte} 필요)`;
+                if (item.req.stat === 'char.aff') reqText = ` (호감 ${item.req.gte}↑)`;
+                else if (item.req.stat === 'char.opn') reqText = ` (개방 ${item.req.gte}↑)`;
+                else if (item.req.stat === 'char.tru') reqText = ` (신뢰 ${item.req.gte}↑)`;
+                else if (item.req.stat === 'char.hp') reqText = ` (건강 ${item.req.gte}↑)`;
+                else if (item.req.stat === 'char.sat') reqText = ` (만족 ${item.req.gte}↑)`;
+                else if (item.req.flag === 'lover') reqText = ` (연인 상태)`;
             }
+
+            // passive/consumable 표시 및 구매완료 표시
+            const typeText = item.type === 'consumable' ? '소비형' : (state.inventory[item.id] ? '보유중' : '영구/소지형');
 
             el.innerHTML = `
                 <div class="card-header">
@@ -120,10 +128,11 @@ export const Render = {
                     <span>¥${item.price}</span>
                 </div>
                 <small>
-                    ${item.type === 'consumable' ? '소비형' : '영구/소지형'}
+                    ${typeText}
                     <span style="color: #d32f2f; font-weight: bold;">${reqText}</span>
                 </small>
             `;
+            // 보유중인 영구 아이템은 클릭 불가 처리 가능, 여기선 단순화
             if (canBuy) {
                 el.onclick = () => onBuyClick(item.id);
             }
