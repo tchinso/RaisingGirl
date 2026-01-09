@@ -147,9 +147,9 @@ export const ITEMS = {
 
     // 약국
     "drug_energy": { id: "drug_energy", name: "에너지드링크", price: 1000, type: "consumable", effects: { sta: 15, str: 1 } },
-    "drug_tonic": { id: "drug_tonic", name: "정력제", price: 2000, type: "consumable", effects: { sat: 3 } }, 
-    "drug_condom": { id: "drug_condom", name: "콘돔", price: 500, type: "passive", effects: { risk: 0 } },
-    "drug_emergency": { id: "drug_emergency", name: "긴급피임약", price: 3000, type: "consumable", effects: { mood: -10 } },
+    //"drug_tonic": { id: "drug_tonic", name: "정력제", price: 2000, type: "consumable", effects: { sat: 3 } }, 
+    //"drug_condom": { id: "drug_condom", name: "콘돔", price: 500, type: "passive", effects: { risk: 0 } },
+    //"drug_emergency": { id: "drug_emergency", name: "항우울제", price: 3000, type: "consumable", effects: { mood: -10 } },
 
     // 카페/술집 (즉시 소비형으로 구현)
     "cafe_coffee": { id: "cafe_coffee", name: "커피(테이크아웃)", price: 500, type: "consumable", effects: { mood: 10, str: -2 } },
@@ -164,7 +164,7 @@ export const ITEMS = {
 
     // 의상/도구
     "dress_onepiece": { id: "dress_onepiece", name: "원피스", price: 8000, type: "item", req: { stat: "char.aff", gte: 50 } },
-    "dress_swimsuit": { id: "dress_swimsuit", name: "노출 수영복", price: 12000, type: "item", req: { stat: "char.opn", gte: 100 } },
+    "dress_swimsuit": { id: "dress_swimsuit", name: "수영복", price: 12000, type: "item", req: { stat: "char.opn", gte: 100 } },
     "dress_nurse": { id: "dress_nurse", name: "간호사복", price: 15000, type: "item", req: { stat: "char.tru", gte: 150 } },
     "tool_camera": { id: "tool_camera", name: "카메라", price: 10000, type: "item", effects: { photo: true } }
 };
