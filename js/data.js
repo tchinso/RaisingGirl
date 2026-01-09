@@ -213,6 +213,7 @@ export const EVENTS = [
         choices: [
             { text: "깨워서 안심시킨다", effects: { aff: 2, tra: -2 } },
             { text: "지켜본다", effects: { tra: 2 } }
+    },
     {
         id: "evt_common_bad_end",
         type: "fixed",
