@@ -1,4 +1,5 @@
 import { ACTIONS, ITEMS } from '../data.js';
+import { EventEngine } from '../engine/events.js'; // [수정] 조건 체크를 위해 추가
 
 export const Render = {
     updateStatus(state) {
@@ -97,15 +98,31 @@ export const Render = {
         Object.values(ITEMS).forEach(item => {
             const el = document.createElement('div');
             el.className = 'card';
-            const canBuy = state.player.money >= item.price;
+            
+            // [수정] 조건 충족 여부 체크
+            const isReqMet = item.req ? EventEngine.checkCondition(item.req, state) : true;
+            const hasMoney = state.player.money >= item.price;
+            const canBuy = hasMoney && isReqMet;
+
             if (!canBuy) el.classList.add('disabled');
+
+            // [수정] 조건 불충족 시 텍스트 표시
+            let reqText = '';
+            if (item.req && !isReqMet) {
+                if (item.req.stat === 'char.aff') reqText = ` (호감 ${item.req.gte} 필요)`;
+                else if (item.req.stat === 'char.opn') reqText = ` (개방 ${item.req.gte} 필요)`;
+                else if (item.req.stat === 'char.tru') reqText = ` (신뢰 ${item.req.gte} 필요)`;
+            }
 
             el.innerHTML = `
                 <div class="card-header">
                     <span>${item.name}</span>
                     <span>¥${item.price}</span>
                 </div>
-                <small>${item.type === 'consumable' ? '소비형' : '영구/소지형'}</small>
+                <small>
+                    ${item.type === 'consumable' ? '소비형' : '영구/소지형'}
+                    <span style="color: #d32f2f; font-weight: bold;">${reqText}</span>
+                </small>
             `;
             if (canBuy) {
                 el.onclick = () => onBuyClick(item.id);
