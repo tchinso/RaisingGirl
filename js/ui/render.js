@@ -31,6 +31,9 @@ export const Render = {
             const limit = action.limits?.daily;
             let isDisabled = false;
 
+            // 행동력이 0 이하이면 모든 일반 행동 비활성화
+            if (state.slotsLeft <= 0) isDisabled = true;
+
             if (limit && used >= limit) isDisabled = true;
             if (state.player.sta < (action.cost.sta || 0)) isDisabled = true;
             if (state.player.money < (action.cost.money || 0)) isDisabled = true;
