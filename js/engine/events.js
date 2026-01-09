@@ -49,6 +49,11 @@ export const EventEngine = {
         if (cond.item) {
             if (!state.inventory[cond.item]) return false;
         }
+        if (cond.flag) {
+            const flagVal = state.flags[cond.flag] || 0;
+            // gte: Greater Than or Equal (이상)
+            if (cond.gte && flagVal < cond.gte) return false;
+        }
         return true;
     }
 };

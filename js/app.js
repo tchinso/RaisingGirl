@@ -75,6 +75,12 @@ function applyEventEffects(effects) {
     if (effects.tra) c.tra += effects.tra;
     if (effects.str) p.str += effects.str;
     if (effects.badFlag) game.data.flags.badFlag = (game.data.flags.badFlag || 0) + effects.badFlag;
+    if (effects.gameOver) {
+        alert("게임 오버"); // 알림창
+        localStorage.clear(); // 세이브 삭제
+        location.reload();    // 재시작
+        return;
+    }
     
     // 단순화된 메시지 처리
     game.log("이벤트 결과가 적용되었습니다.");

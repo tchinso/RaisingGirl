@@ -17,7 +17,7 @@ export const ACTIONS = {
         tags: ["talk"]
     },
     "talk_deep": {
-        id: "talk_deep", name: "심층 대화", phases: ["night"],
+        id: "talk_deep", name: "함께 자기", phases: ["night"],
         cost: { sta: 15, str: 2 }, gain: { aff: 8, tru: 10, opn: 2, mood: 12, lp2: 4 },
         fail: { chance: 0.2, onFailGain: { aff: 3, tru: 3 }, reqStat: "char.tru", reqVal: 60 },
         tags: ["talk"]
@@ -149,7 +149,7 @@ export const ITEMS = {
     "drug_energy": { id: "drug_energy", name: "에너지드링크", price: 1000, type: "consumable", effects: { sta: 15, str: 1 } },
     //"drug_tonic": { id: "drug_tonic", name: "정력제", price: 2000, type: "consumable", effects: { sat: 3 } }, 
     //"drug_condom": { id: "drug_condom", name: "콘돔", price: 500, type: "passive", effects: { risk: 0 } },
-    //"drug_emergency": { id: "drug_emergency", name: "항우울제", price: 3000, type: "consumable", effects: { mood: -10 } },
+    //"drug_emergency": { id: "drug_emergency", name: "긴급피임약", price: 3000, type: "consumable", effects: { mood: -10 } },
 
     // 카페/술집 (즉시 소비형으로 구현)
     "cafe_coffee": { id: "cafe_coffee", name: "커피(테이크아웃)", price: 500, type: "consumable", effects: { mood: 10, str: -2 } },
@@ -193,7 +193,7 @@ export const EVENTS = [
             { text: "고마워. (받아들인다)", effects: { hp: 100, aff: 15, tra: -25, str: -10 } }
         ],
         failText: "그녀는 몸이 안 좋은지 하루 종일 방에 틀어박혀 있습니다.",
-        failEffects: { tra: 10, relapse: 3 }
+        failEffects: { badFlag: 1, tra: 10 }
     },
     {
         id: "evt_rand_clean",
@@ -213,6 +213,16 @@ export const EVENTS = [
         choices: [
             { text: "깨워서 안심시킨다", effects: { aff: 2, tra: -2 } },
             { text: "지켜본다", effects: { tra: 2 } }
+    {
+        id: "evt_common_bad_end",
+        type: "fixed",
+        trigger: { phase: "morning" }, // 매일 아침 체크
+        condition: { flag: "badFlag", gte: 1 }, // 조건: badFlag가 1개라도 있으면 발동
+        
+        text: "아침에 눈을 떴지만, 집안에는 차가운 정적만이 흐릅니다.\n그녀의 방은 텅 비어있고, 짐도 모두 사라졌습니다.\n\n(Bad End: 그녀는 떠났습니다)",
+        choices: [
+            // gameOver: true를 넣어 게임을 완전히 끝냄
+            { text: "받아들인다 (타이틀로)", effects: { gameOver: true } }
         ]
     }
 ];
