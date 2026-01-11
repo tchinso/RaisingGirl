@@ -5,7 +5,7 @@ export const CONSTANTS = {
     SLOTS: { morning: 3, day: 2, evening: 2, night: 2, late: 5 },
     START_STATS: {
         player: { money: 5000, sta: 100, maxSta: 100, str: 10, skl: 0, lp2: 0, virtue: 0, dressTier: 0 },
-        char: { aff: 20, tru: 0, opn: 0, mood: -20, sat: 55, hp: 35, tra: 100, fox: 0, skill_c: 0 }
+        char: { aff: 20, tru: 0, opn: 0, mood: -20, sat: 55, hp: 35, tra: 80, fox: 0, skill_c: 0 }
     }
 };
 
@@ -277,7 +277,7 @@ export const EVENTS = [
         id: "evt_true_end",
         type: "fixed",
         trigger: { phase: "morning" },
-        condition: { flag: "flag_lover", stat: "char.opn", gte: 1000, dayGte: 20 },
+        condition: { flag: "flag_lover", stat: "char.opn", gte: 300, dayGte: 20 },
         text: "햇살이 눈부신 아침, 그녀가 수줍은 미소로 당신을 깨웁니다.\n\n\"우리에게... 사랑의 결실이 생겼어요.\"\n\n두 사람은 서로를 끌어안으며 영원한 행복을 맹세합니다.\n\n< True End: 세계에서 가장 행복한 사람 >",
         choices: [
             { text: "축하합니다! (게임 종료)", effects: { gameOver: true } }
