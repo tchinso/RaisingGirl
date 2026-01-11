@@ -75,6 +75,15 @@ function applyEventEffects(effects) {
     if (effects.tra) c.tra += effects.tra;
     if (effects.str) p.str += effects.str;
     if (effects.badFlag) game.data.flags.badFlag = (game.data.flags.badFlag || 0) + effects.badFlag;
+    if (effects.flag_independent) {
+        game.data.flags.flag_independent = (game.data.flags.flag_independent || 0) + effects.flag_independent;
+    }
+    if (effects.flag_lover) {
+        game.data.flags.flag_lover = (game.data.flags.flag_lover || 0) + effects.flag_lover;
+    }
+    if (effects.lover) {
+        game.data.flags.lover = (game.data.flags.lover || 0) + effects.lover;
+    }
     if (effects.gameOver) {
         alert("게임 오버"); // 알림창
         localStorage.clear(); // 세이브 삭제
