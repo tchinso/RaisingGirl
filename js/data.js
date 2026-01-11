@@ -172,15 +172,15 @@ export const ITEMS = {
     "book_lesson": { id: "book_lesson", name: "[책] 이번 주 교훈", price: 3000, type: "consumable", effects: { lp2: 10 } },
 
     // 의상/도구 (의상 구입 시 dressTier +1)
-    "dress_onepiece": { id: "dress_onepiece", name: "원피스", price: 8000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.aff", gte: 50 } },
+    "dress_onepiece": { id: "dress_onepiece", name: "원피스", price: 8000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.aff", gte: 100 } },
     "dress_swimsuit": { id: "dress_swimsuit", name: "수영복", price: 12000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.opn", gte: 100 } },
     
     // [변경] 간호사복 조건 변경 (신뢰 -> 건강)
-    "dress_nurse": { id: "dress_nurse", name: "간호사복", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.hp", gte: 150 } },
+    "dress_nurse": { id: "dress_nurse", name: "간호사복", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.hp", gte: 100 } },
     
     // [신규] 교복, 산타걸
     "dress_uniform": { id: "dress_uniform", name: "교복", price: 10000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.tru", gte: 150 } },
-    "dress_santa": { id: "dress_santa", name: "산타걸", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.sat", gte: 150 } },
+    "dress_santa": { id: "dress_santa", name: "산타걸", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.sat", gte: 100 } },
 
     // [삭제] 카메라
 };
