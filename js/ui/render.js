@@ -99,11 +99,19 @@ export const Render = {
 
         if (badgeBox) {
             const badges = [
+                // --- 기존 배지 ---
                 { label: "게임 시작", src: "img/1.jpg", show: true },
                 { label: "9일차 아침 이후", src: "img/2.jpg", show: state.day >= 9 },
                 { label: "17일차 아침 이후", src: "img/3.jpg", show: state.day >= 17 },
                 { label: "flag_independent 보유", src: "img/4.jpg", show: (state.flags.flag_independent || 0) > 0 },
-                { label: "flag_lover 보유", src: "img/5.jpg", show: (state.flags.flag_lover || 0) > 0 }
+                { label: "flag_lover 보유", src: "img/5.jpg", show: (state.flags.flag_lover || 0) > 0 },
+
+                // --- 신규 의상 배지 (보유 시 표시) ---
+                { label: "원피스 획득", src: "img/onepiece.jpg", show: state.inventory['dress_onepiece'] },
+                { label: "교복 획득", src: "img/schooluniform.jpg", show: state.inventory['dress_uniform'] },
+                { label: "수영복 획득", src: "img/swimsuit.jpg", show: state.inventory['dress_swimsuit'] },
+                { label: "간호사복 획득", src: "img/nurse.jpg", show: state.inventory['dress_nurse'] },
+                { label: "산타걸 획득", src: "img/santa.jpg", show: state.inventory['dress_santa'] }
             ];
 
             badgeBox.innerHTML = badges
@@ -115,8 +123,7 @@ export const Render = {
                     </div>
                 `)
                 .join('');
-        }
-    },
+        },
 
     updateShop(state, onBuyClick) {
         const container = document.getElementById('shop-list');
