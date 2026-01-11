@@ -180,7 +180,7 @@ export const ITEMS = {
     
     // [신규] 교복, 산타걸
     "dress_uniform": { id: "dress_uniform", name: "교복", price: 10000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.tru", gte: 150 } },
-    "dress_santa": { id: "dress_santa", name: "산타걸", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.sat", gte: 50 } },
+    "dress_santa": { id: "dress_santa", name: "산타걸", price: 15000, type: "item", effects: { dressTier: 1 }, req: { stat: "char.sat", gte: 30 } },
 
     // [삭제] 카메라
 };
