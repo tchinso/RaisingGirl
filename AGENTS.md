@@ -1,7 +1,6 @@
 이미 잘 작동하는 코드니까 거대한 구조 수정은 하지 말아줘.
 #### 수정할 사항
-render.js에 의상 뱃지를 추가하면서 뭐가 문법오류가 생긴 것 같아. 
+지금 자립 뱃지가 표시되지 않아.
+뱃지가 5개까지만 표시되는걸까? 그런 코드를 넣은 적은 없는데.
 
-브라우저 콘솔에 뜨는 오류메시지는 다음과 같아.
-The user has the page "https://tchinso.github.io/RaisingGirl/index.html" open and an error message is shown in the DevTools Console for this page. The error message is wrapped within <DevToolsErrorMessage></DevToolsErrorMessage> below. Explain the error message and what could have caused it, and provide a way to fix it. <DevToolsErrorMessage>render.js:126  Uncaught SyntaxError: Unexpected token ','</DevToolsErrorMessage>
-render.js:126  Uncaught SyntaxError: Unexpected token ','
+{"version":1,"state":{"day":21,"timePhase":"night","slotsLeft":2,"player":{"money":915500,"sta":85,"maxSta":104,"str":0,"skl":0,"lp2":0,"virtue":0,"dressTier":3,"bookTier":2},"char":{"aff":1325,"tru":1241,"opn":0,"mood":100,"sat":25,"hp":100,"tra":13,"fox":0,"skill_c":0},"inventory":{"food_cupramen":0,"food_bento":0,"dress_onepiece":2,"book_basic":1,"book_synergy":1,"dress_uniform":1,"food_partyset":0},"dailyLimits":{"care_headpat":1},"flags":{"evt_rand_nightmare":true,"evt_day7_check":true,"evt_rand_clean":true,"evt_day16_nurse":true,"evt_badge_independent":true},"log":["[Day 21 night] 시간 변경: night","[Day 21 evening] 티타임 실행.","[Day 21 evening] 티타임 실행.","[Day 21 evening] 도시락 사용.","[Day 21 evening] 도시락 사용.","[Day 21 evening] 도시락 사용.","[Day 21 evening] 파티세트 사용.","[Day 21 evening] 시간 변경: evening","[Day 21 day] 쇼핑하러 가기 실행.","[Day 21 day] 쇼핑하러 가기 실행.","[Day 21 day] 시간 변경: day","[Day 21 morning] 머리 쓰다듬기 실행.","[Day 21 morning] 청소 실행.","[Day 21 morning] 청소 실행.","[Day 21 morning] Day 21 시작.","[Day 20 late] Day 20 종료.","[Day 20 late] 휴식 실행.","[Day 20 late] 휴식 실행.","[Day 20 late] 휴식 실행.","[Day 20 late] 휴식 실행.","[Day 20 late] 휴식 실행.","[Day 20 late] 시간 변경: late","[Day 20 night] 휴식 실행.","[Day 20 night] 휴식 실행.","[Day 20 night] 시간 변경: night"],"rngSeed":1768113745175},"rng":1823060719565}
