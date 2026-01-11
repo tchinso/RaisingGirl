@@ -74,14 +74,17 @@ export const Render = {
     updateStats(state) {
         const pGrid = document.getElementById('player-stats-grid');
         const cGrid = document.getElementById('char-stats-grid');
+        const badgeBox = document.getElementById('char-image-badges');
         
         // [수정] 의상 티어(dressTier) 표시
-        pGrid.innerHTML = `
-            <div>생활기술(SKL): ${state.player.skl}</div>
-            <div>LP2: ${state.player.lp2}</div>
-            <div>덕행: ${state.player.virtue || 0}</div>
-            <div>의상 레벨: ${state.player.dressTier || 0}</div>
-        `;
+        if (pGrid) {
+            pGrid.innerHTML = `
+                <div>생활기술(SKL): ${state.player.skl}</div>
+                <div>LP2: ${state.player.lp2}</div>
+                <div>덕행: ${state.player.virtue || 0}</div>
+                <div>의상 레벨: ${state.player.dressTier || 0}</div>
+            `;
+        }
         
         // [수정] 개방도(OPN) 표시
         cGrid.innerHTML = `
@@ -93,6 +96,26 @@ export const Render = {
             <div>건강(HP): ${state.char.hp}</div>
             <div>트라우마(TRA): ${state.char.tra}</div>
         `;
+
+        if (badgeBox) {
+            const badges = [
+                { label: "게임 시작", src: "img/1.jpg", show: true },
+                { label: "9일차 아침 이후", src: "img/2.jpg", show: state.day >= 9 },
+                { label: "17일차 아침 이후", src: "img/3.jpg", show: state.day >= 17 },
+                { label: "flag_independent 보유", src: "img/4.jpg", show: (state.flags.flag_independent || 0) > 0 },
+                { label: "flag_lover 보유", src: "img/5.jpg", show: (state.flags.flag_lover || 0) > 0 }
+            ];
+
+            badgeBox.innerHTML = badges
+                .filter(badge => badge.show)
+                .map(badge => `
+                    <div class="badge-entry">
+                        <img src="${badge.src}" alt="${badge.label}">
+                        <span>${badge.label}</span>
+                    </div>
+                `)
+                .join('');
+        }
     },
 
     updateShop(state, onBuyClick) {

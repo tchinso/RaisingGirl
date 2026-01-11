@@ -39,20 +39,35 @@ export const EventEngine = {
 
     checkCondition(cond, state) {
         if (!cond) return true;
-        
-        if (cond.stat) {
-            const [target, key] = cond.stat.split('.');
+
+        const checkStat = (suffix = '') => {
+            const statKey = cond[`stat${suffix}`];
+            if (!statKey) return true;
+            const [target, key] = statKey.split('.');
             const val = state[target][key];
-            if (cond.gte && val < cond.gte) return false;
-            if (cond.lte && val > cond.lte) return false;
-        }
+            const gte = cond[`gte${suffix}`];
+            const lte = cond[`lte${suffix}`];
+            if (gte !== undefined && val < gte) return false;
+            if (lte !== undefined && val > lte) return false;
+            return true;
+        };
+
+        if (!checkStat('') || !checkStat('2') || !checkStat('3')) return false;
+
+        if (cond.dayGte !== undefined && state.day < cond.dayGte) return false;
+        if (cond.dayLte !== undefined && state.day > cond.dayLte) return false;
+
         if (cond.item) {
             if (!state.inventory[cond.item]) return false;
         }
         if (cond.flag) {
             const flagVal = state.flags[cond.flag] || 0;
-            // gte: Greater Than or Equal (이상)
-            if (cond.gte && flagVal < cond.gte) return false;
+            // flagGte: Greater Than or Equal (이상)
+            if (cond.flagGte !== undefined) {
+                if (flagVal < cond.flagGte) return false;
+            } else if (flagVal <= 0) {
+                return false;
+            }
         }
         return true;
     }

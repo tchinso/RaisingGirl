@@ -73,6 +73,30 @@ body {
     margin-bottom: 20px;
     font-size: 0.9rem;
 }
+.badge-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+.badge-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fafafa;
+}
+.badge-entry img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+}
+.badge-entry span {
+    font-size: 0.85rem;
+    color: #555;
+}
 
 /* 카드 스타일 */
 .card {

@@ -249,11 +249,10 @@ export const EVENTS = [
         type: "fixed",
         trigger: { phase: "morning" },
         // 조건: bookTier 2이상 (기본책+화학반응 등), 돈 200,000, 호감 150
-        condition: { stat: "player.money", gte: 200000, stat2: "char.aff", gte2: 150 }, // bookTier는 별도 체크 필요하지만 간략화를 위해 여기서 생략하거나 Custom Logic에서 처리
         // 단순화를 위해 money/aff만 체크하거나, executeAction에서 bookTier체크 로직 필요.
         // 여기서는 조건 만족 시 발생하도록 설정. (참고: bookTier 조건은 EventEngine 확장이 필요할 수 있으나,
         // bookTier는 player stats에 있으므로 stat: "player.bookTier" gte: 2 로 처리 가능)
-        condition: { stat: "player.money", gte: 200000, stat2: "char.aff", gte2: 150, stat3: "player.bookTier", gte3: 2 },
+        condition: { stat: "player.money", gte: 200000, stat2: "char.aff", gte2: 150, stat3: "player.bookTier", gte3: 2, dayGte: 20 },
         
         text: "통장을 확인해보니 목표했던 금액이 모였습니다.\n지식과 경험도 충분히 쌓였습니다.\n이제 당신은 누구에게도 의존하지 않고 살아갈 수 있습니다.",
         choices: [
@@ -266,7 +265,7 @@ export const EVENTS = [
         id: "evt_badge_lover",
         type: "fixed",
         trigger: { phase: "night" },
-        condition: { flag: "flag_independent", stat: "char.tra", lte: 0, stat2: "char.aff", gte2: 300, stat3: "char.tru", gte3: 200 },
+        condition: { flag: "flag_independent", stat: "char.tra", lte: 0, stat2: "char.aff", gte2: 300, stat3: "char.tru", gte3: 200, dayGte: 20 },
         text: "그녀가 당신의 손을 잡고 진지한 눈빛으로 바라봅니다.\n트라우마를 극복하고, 당신을 온전히 신뢰하게 된 그녀가 고백해옵니다.",
         choices: [
             { text: "나도 사랑해. (연인이 된다)", effects: { flag_lover: 1, lover: 1 } } // lover 플래그는 시스템용, flag_lover는 배지용
@@ -278,7 +277,7 @@ export const EVENTS = [
         id: "evt_true_end",
         type: "fixed",
         trigger: { phase: "morning" },
-        condition: { flag: "lover", stat: "char.opn", gte: 1000 },
+        condition: { flag: "flag_lover", stat: "char.opn", gte: 1000, dayGte: 20 },
         text: "햇살이 눈부신 아침, 그녀가 수줍은 미소로 당신을 깨웁니다.\n\n\"우리에게... 사랑의 결실이 생겼어요.\"\n\n두 사람은 서로를 끌어안으며 영원한 행복을 맹세합니다.\n\n< True End: 세계에서 가장 행복한 사람 >",
         choices: [
             { text: "축하합니다! (게임 종료)", effects: { gameOver: true } }
