@@ -5,7 +5,7 @@ export const CONSTANTS = {
     SLOTS: { morning: 3, day: 2, evening: 2, night: 2, late: 5 },
     START_STATS: {
         player: { money: 5000, sta: 100, maxSta: 100, str: 10, skl: 0, lp2: 0, virtue: 0, dressTier: 0 },
-        char: { aff: 20, tru: 0, opn: 0, mood: -20, sat: 55, hp: 35, tra: 80, fox: 0, skill_c: 0 }
+        char: { aff: 20, tru: 0, opn: 0, mood: -20, sat: 55, hp: 35, tra: 100, fox: 0, skill_c: 0 }
     }
 };
 
@@ -248,11 +248,11 @@ export const EVENTS = [
         id: "evt_badge_independent",
         type: "fixed",
         trigger: { phase: "morning" },
-        // 조건: bookTier 2이상 (기본책+화학반응 등), 돈 200,000, 호감 150
+        // 조건: bookTier 2이상 (기본책+화학반응 등), 돈 50,000, 호감 150
         // 단순화를 위해 money/aff만 체크하거나, executeAction에서 bookTier체크 로직 필요.
         // 여기서는 조건 만족 시 발생하도록 설정. (참고: bookTier 조건은 EventEngine 확장이 필요할 수 있으나,
         // bookTier는 player stats에 있으므로 stat: "player.bookTier" gte: 2 로 처리 가능)
-        condition: { stat: "player.money", gte: 200000, stat2: "char.aff", gte2: 150, stat3: "player.bookTier", gte3: 2, dayGte: 20 },
+        condition: { stat: "player.money", gte: 50000, stat2: "char.aff", gte2: 150, stat3: "player.bookTier", gte3: 2, dayGte: 20 },
         
         text: "통장을 확인해보니 목표했던 금액이 모였습니다.\n지식과 경험도 충분히 쌓였습니다.\n이제 당신은 누구에게도 의존하지 않고 살아갈 수 있습니다.",
         choices: [
