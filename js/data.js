@@ -202,7 +202,7 @@ export const EVENTS = [
         id: "evt_day16_nurse",
         type: "fixed",
         trigger: { day: 16, phase: "morning" },
-        condition: { stat: "char.aff", gte: 70, item: "dress_onepiece" },
+        condition: { stat: "char.aff", gte: 200, item: "dress_onepiece" },
         text: "16일차 아침. 그녀가 원피스를 입고 수줍게 웃으며 간호를 자처합니다.",
         choices: [
             { text: "고마워. (받아들인다)", effects: { hp: 100, aff: 15, tra: -25, str: -10 } }
