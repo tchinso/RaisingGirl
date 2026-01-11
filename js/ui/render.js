@@ -123,7 +123,8 @@ export const Render = {
                     </div>
                 `)
                 .join('');
-        },
+        }
+    },
 
     updateShop(state, onBuyClick) {
         const container = document.getElementById('shop-list');
