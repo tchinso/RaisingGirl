@@ -128,7 +128,7 @@ export const ACTIONS = {
     "intimacy_bath": {
         id: "intimacy_bath", name: "함께 목욕", phases: ["night"],
         cost: { sta: 8 }, gain: { aff: 4, tru: 6, opn: 3, mood: 10, sat: 2 },
-        req: { skill: "together_bath" },
+        req: { flag: "lover" },
         tags: ["intimacy"]
     },
     
